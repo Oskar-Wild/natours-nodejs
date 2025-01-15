@@ -606,6 +606,7 @@ var _leafletJsDefault = parcelHelpers.interopDefault(_leafletJs);
 // DOM ELEMENTS
 const map = document.getElementById('map');
 const loginForm = document.querySelector('.form');
+const logOutBtn = document.querySelector('.nav__el--logout');
 // DELEGATION
 if (map) {
     const locations = JSON.parse(document.getElementById('map').dataset.locations);
@@ -617,11 +618,13 @@ if (loginForm) document.querySelector('.form').addEventListener('submit', (e)=>{
     const password = document.getElementById('password').value;
     (0, _loginJs.login)(email, password);
 });
+if (logOutBtn) logOutBtn.addEventListener('click', (0, _loginJs.logout));
 
 },{"./login.js":"aUJqG","./leaflet.js":"kDEm8","@parcel/transformer-js/src/esmodule-helpers.js":"fofuL"}],"aUJqG":[function(require,module,exports,__globalThis) {
 /* eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "login", ()=>login);
+parcelHelpers.export(exports, "logout", ()=>logout);
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alerts = require("./alerts");
@@ -645,8 +648,19 @@ const login = async (email, password)=>{
         (0, _alerts.showAlert)('error', err.response.data.message);
     }
 };
+const logout = async ()=>{
+    try {
+        const res = await (0, _axiosDefault.default)({
+            method: 'GET',
+            url: 'http://127.0.0.1:3000/api/v1/users/logout'
+        });
+        if (res.data.status === 'success') location.reload(true);
+    } catch (err) {
+        (0, _alerts.showAlert)('error', 'Error logging out! Try again.');
+    }
+};
 
-},{"axios":"5vw73","@parcel/transformer-js/src/esmodule-helpers.js":"fofuL","./alerts":"97oIL"}],"5vw73":[function(require,module,exports,__globalThis) {
+},{"axios":"5vw73","./alerts":"97oIL","@parcel/transformer-js/src/esmodule-helpers.js":"fofuL"}],"5vw73":[function(require,module,exports,__globalThis) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>(0, _axiosJsDefault.default));
@@ -5655,7 +5669,7 @@ const displayMap = (locations)=>{
 };
 exports.default = displayMap;
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"fofuL","leaflet":"6zGoo"}],"6zGoo":[function(require,module,exports,__globalThis) {
+},{"leaflet":"6zGoo","@parcel/transformer-js/src/esmodule-helpers.js":"fofuL"}],"6zGoo":[function(require,module,exports,__globalThis) {
 /* @preserve
  * Leaflet 1.9.4, a JS library for interactive maps. https://leafletjs.com
  * (c) 2010-2023 Vladimir Agafonkin, (c) 2010-2011 CloudMade
