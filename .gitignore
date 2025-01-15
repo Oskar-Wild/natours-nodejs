@@ -1,4 +1,5 @@
 node_modules
 dev-data
-.parcel-cache
 *.env
+/.parcel-cache
+.parcel-cache
