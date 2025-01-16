@@ -119,7 +119,7 @@ export const protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
-  } else if (req.cookies.jwt) {
+  } else if (req.cookies.jwt && req.cookies.jwt !== 'loggedout') {
     token = req.cookies.jwt;
   }
 
@@ -134,6 +134,8 @@ export const protect = catchAsync(async (req, res, next) => {
 
   // 3) Check if user still exists
   const currentUser = await User.findById(decoded.id);
+  // THERE IS A LOGGED IN USER
+  res.locals.user = currentUser;
 
   if (!currentUser) {
     return next(
