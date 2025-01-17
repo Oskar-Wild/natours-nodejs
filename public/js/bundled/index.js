@@ -602,12 +602,14 @@ var _polyfill = require("@babel/polyfill");
 // import 'regenerator-runtime/runtime';
 var _loginJs = require("./login.js");
 var _updateSettingsJs = require("./updateSettings.js");
+var _updateSettingsJsDefault = parcelHelpers.interopDefault(_updateSettingsJs);
 var _leafletJs = require("./leaflet.js");
 var _leafletJsDefault = parcelHelpers.interopDefault(_leafletJs);
 // DOM ELEMENTS
 const map = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
-const userInfoForm = document.querySelector('.form-user-data');
+const userDataForm = document.querySelector('.form-user-data');
+const userPasswordForm = document.querySelector('.form-user-password');
 const logOutBtn = document.querySelector('.nav__el--logout');
 // DELEGATION
 if (map) {
@@ -620,11 +622,30 @@ if (loginForm) loginForm.addEventListener('submit', (e)=>{
     const password = document.getElementById('password').value;
     (0, _loginJs.login)(email, password);
 });
-if (userInfoForm) userInfoForm.addEventListener('submit', (e)=>{
+if (userDataForm) userDataForm.addEventListener('submit', (e)=>{
     e.preventDefault();
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
-    (0, _updateSettingsJs.updateData)(name, email);
+    (0, _updateSettingsJsDefault.default)({
+        name,
+        email
+    }, 'data');
+});
+if (userPasswordForm) userPasswordForm.addEventListener('submit', async (e)=>{
+    e.preventDefault();
+    document.querySelector('.btn--save-password').textContent = 'Updating...';
+    const passwordCurrent = document.getElementById('password-current').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('password-confirm').value;
+    await (0, _updateSettingsJsDefault.default)({
+        passwordCurrent,
+        password,
+        passwordConfirm
+    }, 'password');
+    document.querySelector('.btn--save-password').textContent = 'Save password';
+    document.getElementById('password-current').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('password-confirm').value = '';
 });
 if (logOutBtn) logOutBtn.addEventListener('click', ()=>{
     (0, _loginJs.logout)();
@@ -5621,7 +5642,7 @@ parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "hideAlert", ()=>hideAlert);
 parcelHelpers.export(exports, "showAlert", ()=>showAlert);
 const hideAlert = ()=>{
-    const el = document.querySelector('alert');
+    const el = document.querySelector('.alert');
     if (el) el.parentElement.removeChild(el);
 };
 const showAlert = (type, msg)=>{
@@ -16278,27 +16299,24 @@ exports.default = displayMap;
 },{}],"j7xLx":[function(require,module,exports,__globalThis) {
 /* eslint-disable */ var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
-parcelHelpers.export(exports, "updateData", ()=>updateData);
-parcelHelpers.export(exports, "updatePassword", ()=>updatePassword);
 var _axios = require("axios");
 var _axiosDefault = parcelHelpers.interopDefault(_axios);
 var _alertsJs = require("./alerts.js");
-const updateData = async (name, email)=>{
+// type is either 'password' or 'data'
+const updateSettings = async (data, type)=>{
     try {
+        const url = type === 'password' ? 'http://127.0.0.1:3000/api/v1/users/updateMyPassword' : 'http://127.0.0.1:3000/api/v1/users/updateMe';
         const res = await (0, _axiosDefault.default)({
             method: 'PATCH',
-            url: 'http://127.0.0.1:3000/api/v1/users/updateMe',
-            data: {
-                name,
-                email
-            }
+            url,
+            data
         });
-        if (res.data.status === 'success') (0, _alertsJs.showAlert)('success', 'User info updated successfully!');
+        if (res.data.status === 'success') (0, _alertsJs.showAlert)('success', `${type.toUpperCase()} updated successfully!`);
     } catch (err) {
         (0, _alertsJs.showAlert)('error', err.response.data.message);
     }
 };
-const updatePassword = async ()=>{};
+exports.default = updateSettings;
 
 },{"axios":"5vw73","./alerts.js":"97oIL","@parcel/transformer-js/src/esmodule-helpers.js":"fofuL"}],"huWpU":[function(require,module,exports,__globalThis) {
 "use strict";
