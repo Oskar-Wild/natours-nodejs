@@ -14,6 +14,7 @@ import globalErrorHandler from './controllers/errorController.js';
 import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import reviewRouter from './routes/reviewRoutes.js';
+import bookingRouter from './routes/bookingRoutes.js';
 import viewRouter from './routes/viewRoutes.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -144,6 +145,7 @@ app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
+app.use('/api/v1/bookings', bookingRouter);
 
 app.all('*', (req, res, next) => {
   // res.status(404).json({
