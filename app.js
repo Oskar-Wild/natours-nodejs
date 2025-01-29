@@ -17,6 +17,7 @@ import tourRouter from './routes/tourRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import reviewRouter from './routes/reviewRoutes.js';
 import bookingRouter from './routes/bookingRoutes.js';
+import bookingController from './routes/bookingController.js';
 import viewRouter from './routes/viewRoutes.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -115,6 +116,13 @@ const limiter = rateLimit({
 });
 
 app.use('/api', limiter);
+
+// Stripe webhook, BEFORE body-parser, because stripe needs the body as stream
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout,
+);
 
 // Body parser, reading data from the body into req.body
 app.use(express.json({ limit: '10kb' }));
