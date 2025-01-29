@@ -2,16 +2,19 @@
 import '@babel/polyfill';
 // import 'core-js';
 // import 'regenerator-runtime/runtime';
-import { login, logout } from './login.js';
+import { signup, login, logout } from './login.js';
 import updateSettings from './updateSettings.js';
 import displayMap from './leaflet.js';
+import { bookTour } from './stripe.js';
 
 // DOM ELEMENTS
 const map = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
+const signupForm = document.querySelector('.form--signup');
 const userDataForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
 const logOutBtn = document.querySelector('.nav__el--logout');
+const bookBtn = document.getElementById('book-tour');
 
 // DELEGATION
 if (map) {
@@ -19,6 +22,19 @@ if (map) {
     document.getElementById('map').dataset.locations,
   );
   displayMap(locations);
+}
+
+if (signupForm) {
+  signupForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('passwordconfirm').value;
+
+    signup(name, email, password, passwordConfirm);
+  });
 }
 
 if (loginForm) {
@@ -68,3 +84,11 @@ if (logOutBtn)
   logOutBtn.addEventListener('click', () => {
     logout();
   });
+
+if (bookBtn) {
+  bookBtn.addEventListener('click', (e) => {
+    e.target.textContent = 'Processing...';
+    const { tourId } = e.target.dataset;
+    bookTour(tourId);
+  });
+}
