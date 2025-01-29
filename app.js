@@ -8,6 +8,8 @@ import mongoSanitize from 'express-mongo-sanitize';
 import xss from 'xss-clean';
 import hpp from 'hpp';
 import cookieParser from 'cookie-parser';
+import compression from 'compression';
+import cors from 'cors';
 
 import AppError from './utils/appError.js';
 import globalErrorHandler from './controllers/errorController.js';
@@ -16,11 +18,12 @@ import userRouter from './routes/userRoutes.js';
 import reviewRouter from './routes/reviewRoutes.js';
 import bookingRouter from './routes/bookingRoutes.js';
 import viewRouter from './routes/viewRoutes.js';
-import compression from 'compression';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
+
+// app.enable('trust proxy'); // Heroku specific
 
 app.set('view engine', 'pug');
 app.set('views', `${__dirname}/views`);
@@ -31,6 +34,11 @@ app.use(express.static(`${__dirname}/public`));
 // 1) GLOBAL MIDDLEWARES
 // Set security HTTP headers
 // app.use(helmet());
+
+// Implement CORS
+app.use(cors()); // Access-Control-Allow-Origin *
+
+app.options('*', cors());
 
 const scriptSrcUrls = [
   'https://unpkg.com/',

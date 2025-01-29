@@ -31,3 +31,11 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
   });
 });
+
+// SIGTERM signal is a signal sent to a process to request its termination
+// process.on('SIGTERM', () => {
+//   console.log('SIGTERM RECEIVED. Shutting down gracefully');
+//   server.close(() => {
+//     console.log('Process terminated!');
+//   });
+// });
