@@ -24,7 +24,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const app = express();
 
-// app.enable('trust proxy'); // Heroku specific
+app.enable('trust proxy'); // Heroku specific
 
 app.set('view engine', 'pug');
 app.set('views', `${__dirname}/views`);
