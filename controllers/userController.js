@@ -89,8 +89,6 @@ export const updateMe = catchAsync(async (req, res, next) => {
     runValidators: true,
   });
 
-  console.log(updatedUser);
-
   res.status(200).json({
     status: 'success',
     data: {

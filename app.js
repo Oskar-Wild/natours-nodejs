@@ -16,6 +16,7 @@ import userRouter from './routes/userRoutes.js';
 import reviewRouter from './routes/reviewRoutes.js';
 import bookingRouter from './routes/bookingRoutes.js';
 import viewRouter from './routes/viewRoutes.js';
+import compression from 'compression';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -132,10 +133,11 @@ app.use(
   }),
 );
 
+app.use(compression());
+
 // Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
-  // console.log(req.cookies);
 
   next();
 });

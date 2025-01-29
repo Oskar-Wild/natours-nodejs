@@ -137,21 +137,6 @@ tourSchema.pre('save', function (next) {
   next();
 });
 
-// tourSchema.pre('save', async function (next) {
-//   const giudesPromises = this.guides.map(async (id) => await User.findById(id));
-//   this.guides = await Promise.all(giudesPromises);
-// });
-
-// tourSchema.pre('save', (next) => {
-//   console.log('Will save document...');
-//   next();
-// });
-
-// tourSchema.post('save', (doc, next) => {
-//   console.log(doc);
-//   next();
-// });
-
 // QUERY MIDDLEWARE
 tourSchema.pre(/^find/, function (next) {
   this.find({ secretTour: { $ne: true } });

@@ -83,8 +83,6 @@ reviewSchema.statics.calcAverageRatings = async function (tourId) {
       ratingsAverage: 0,
     });
   }
-
-  console.log(stats);
 };
 
 reviewSchema.post('save', function () {
@@ -92,14 +90,6 @@ reviewSchema.post('save', function () {
 
   this.constructor.calcAverageRatings(this.tour);
 });
-
-// findByIdAndUpdate
-// findByIdAndDelete
-// reviewSchema.pre(/^findOneAnd/, async function (next) {
-//   this.r = await this.findOne(); // does NOT work here
-//   console.log(r);
-//   next();
-// });
 
 reviewSchema.post(/^findOneAnd/, async (doc) => {
   // doc.consturstor points to the Review model.
